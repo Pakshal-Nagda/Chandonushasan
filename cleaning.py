@@ -13,7 +13,7 @@ def raw2cleaned(filelist):
         cleaned = re.sub(r'[^\u0900-\u0970\s.]', '', text)
         cleaned = re.sub(r'।\s*।', '॥', cleaned)
         cleaned = re.sub(r'(([॥।])([०१२३४५६७८९\s.]*)\2)', cache_num, cleaned)
-        cleaned = re.sub(r'यथा\s+', 'यथा\n', cleaned, flags=re.DOTALL)
+        cleaned = re.sub(r'यथा\s*', 'यथा\n', cleaned, flags=re.DOTALL)
         cleaned = cleaned\
             .replace('॥', '॥\n')\
             .replace('।', '।\n')\
