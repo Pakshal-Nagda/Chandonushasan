@@ -15,7 +15,7 @@ def cache_num(match):
         .replace('७', '7')\
         .replace('८', '8')\
         .replace('९', '9')
-    return f'|{number}|\n'
+    return f' |{number}|\n'
 
 def raw2cleaned(filelist):
     for file in filelist:
@@ -24,8 +24,8 @@ def raw2cleaned(filelist):
         cleaned = re.sub(r'[^\u0900-\u0970\s.]', '', text)
         cleaned = re.sub(r'।\s*।', '॥', cleaned)
         cleaned = re.sub(r'($|\s+)यथा\s*', ' यथा\n', cleaned, flags=re.DOTALL)
-        cleaned = re.sub(r'(([॥।])([०१२३४५६७८९\s.]*)\2)', cache_num, cleaned)
-        cleaned = re.sub(r'(छंदोनुशासन|छन्दोऽनुशासनम्)[।\s]+', '', cleaned, flags=re.DOTALL)
+        cleaned = re.sub(r'(\s*([॥।])([०१२३४५६७८९\s.]*)\2)', cache_num, cleaned)
+        cleaned = re.sub(r'(छंदोनुशासन|छन्दोऽनुशासनम्|द्वितीयोऽध्यायः)[।\s]+', '', cleaned, flags=re.DOTALL)
         cleaned = re.sub(r'[.०१२३४५६७८९]', '', cleaned)
         cleaned = cleaned\
             .replace('॥', '॥\n')\
