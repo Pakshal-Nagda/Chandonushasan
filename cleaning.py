@@ -21,9 +21,9 @@ def raw2cleaned(filelist):
     for file in filelist:
         with open('raw/' + file, 'r') as f:
             text = f.read()
-        cleaned = re.sub(r'[^\u0900-\u0970\s.]', '', text)
+        cleaned = re.sub(r'[-*]{10,}', 'पृष्ठान्तम्॥', text)
+        cleaned = re.sub(r'[^\u0900-\u0970\s.]', '', cleaned)
         cleaned = re.sub(r'।\s*।', '॥', cleaned)
-        #cleaned = re.sub(r'(\s+)यथा\s*', ' यथा\n', cleaned, flags=re.DOTALL)
         cleaned = re.sub(r'(\s*([॥।])([०१२३४५६७८९\s.]*)\2)', cache_num, cleaned)
         cleaned = re.sub(r'(छंदोनुशासन|छन्दोऽनुशासनम्|द्वितीयोऽध्यायः)[।\s]+', '', cleaned, flags=re.DOTALL)
         cleaned = re.sub(r'[.०१२३४५६७८९]', '', cleaned)
