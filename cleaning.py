@@ -1,7 +1,7 @@
 import re
 
 def cache_num(match):
-    number = match.group(3)
+    number = match.group(2)
     number = re.sub(r'\s', '', number)
     number = number\
         .replace('.', '_')\
@@ -24,7 +24,7 @@ def raw2cleaned(filelist):
         cleaned = re.sub(r'[-*]{10,}', 'पृष्ठान्तम्॥', text)
         cleaned = re.sub(r'[^\u0900-\u0970\s.]', '', cleaned)
         cleaned = re.sub(r'।\s*।', '॥', cleaned)
-        cleaned = re.sub(r'(\s*([॥।])([०१२३४५६७८९\s.]*)\2)', cache_num, cleaned)
+        cleaned = re.sub(r'(\s*[॥।]([०१२३४५६७८९\s.]*)[॥।])', cache_num, cleaned)
         cleaned = re.sub(r'(छंदोनुशासन|छन्दोऽनुशासनम्|द्वितीयोऽध्यायः)[।\s]+', '', cleaned, flags=re.DOTALL)
         cleaned = re.sub(r'[.०१२३४५६७८९]', '', cleaned)
         cleaned = cleaned\
@@ -66,6 +66,8 @@ def renumber(filelist):
                 if buffer:
                     prev, next = max_num, number
                     if prev % 1 == 0 and next == prev + 1:
+                        correction = f'{int(prev)}.1'
+                    elif next % 1 == 0 and int(next) == int(prev) + 1:
                         correction = f'{int(prev)}.1'
                     elif int(next) == int(prev) + 1:
                         correction = f'{int(next)}'
