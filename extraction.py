@@ -1,13 +1,7 @@
 import re
 from extraction_verse import verse_to_GL
 from extraction_sutra import sutra_to_GL
-
-def pattern_to_GL(pattern, n):
-    candidates = []
-    candidates += re.findall(r'(([यमतरजभनस]\s*(गण[ोौ]?\s*))+|([यमतरजभनसलग][िीुूृॄॢॣ]?\s*){3,}ा|[यमतरजभनस]\s*(गण)?\s*(द्वय|त्रय|चतुष्टय|पञ्चक|षट्क|सप्तक|ाष्टकम्)ं?\s*[यमतरजभनस]ो)\s*((गुरु|लघु)\s*(गुरू|लघू|द्वय)?)?')
-    candidates += re.findall(r'(([यमतरजभनस]\s*(गण[ोौ]?\s*))+|([यमतरजभनसलग][िीुूृॄॢॣ]?\s*){3,}ा|[यमतरजभनस]\s*(गण)?\s*(द्वय|त्रय|चतुष्टय|पञ्चक|षट्क|सप्तक|ाष्टकम्)ं?\s*[यमतरजभनस]ो)+\s*((गुरु|लघु)\s*(गुरू|लघू|द्वय)?)?')
-    yati = re.findall(r'((त्रि|चतुर्?|पञ्च|षड्?|सप्त|ष्ट[ाे]?|नव|([ेए]का|द्वा|चतुर्|पञ्च)?दश)भि.?\s*).*यति')
-    yati = re.findall(r'ैरिति वर्तते')
+from extraction_pattern import pattern_to_GL
 
 if __name__ == '__main__':
 
@@ -40,18 +34,12 @@ if __name__ == '__main__':
             match = match.group() if match is not None else None
             evidences[i].append(match)
 
-    jaati_re = r'((उ|अत्यु)क्ताया|मध्याया|(सु)?प्रतिष्ठाया|गायत्र्या|उष्णिहि|(अनु|त्रि)ष्टुभि|बृहत्या|प(ङ्क्तौ|क्को|तौ)|(अति)?जगत्या|(अति)?शक्वर्या|अ(त्य)?ष्टौ|(अति)?धृत्या|(प्र|आ|वि|सं|अभि|उत्)?कृतौ)ं?'
-    gana = '[यमतरजभनस]'
-    ganagl = '[यमतरजभनसलग]'
-    yati = '[ग-ण]+ैः'
-    g1 = fr'{ganagl}([ोः]|[िीुूृॄॢॣ](ः|र्)|(?=\s*[अआइईउऊऋॠऌॡएऐओऔ])|श्(?=[चछ])|ष्(?=[टठ])|स्(?=[तथ]))'
-    g2 = fr'({ganagl}[ािीुूृॄॢॣ्]?)?{ganagl}([ौ]|ा(?=व))'
-    g3 = fr'({ganagl}्?{ganagl}{ganagl}|{ganagl}[ािीुूृॄॢॣ्]?{ganagl}्{ganagl})ाः?'
+    jaati = r'((उ|अत्यु)क्ताया|मध्याया|(सु)?प्रतिष्ठाया|गायत्र्या|उष्णिहि|(अनु|त्रि)ष्टुभि|बृहत्या|प(ङ्क्तौ|क्को|तौ)|(अति)?जगत्या|(अति)?शक्वर्या|अ(त्य)?ष्टौ|(अति)?धृत्या|(प्र|आ|वि|सं|अभि|उत्)?कृतौ)ं?'
 
     # Finding sutra indices where number of syllables change
     sutra_changes = []
     for i in evidences:
-        if re.search(jaati_re, evidences[i][0]) or re.search(jaati_re, evidences[i][1]):
+        if re.search(jaati, evidences[i][0]) or re.search(jaati, evidences[i][1]):
             sutra_changes.append(i)
 
     ## Preliminary sanity check tests
@@ -105,22 +93,30 @@ if __name__ == '__main__':
     #        if not isinstance(pattern, str):
     #            print(i, verse, pattern, score)
 
-    # Testing sutra_to_GL()
-    n = 0
-    k = 0
+    ## Testing sutra_to_GL()
+    #n = 0
+    #k = 0
+    #for i in evidences:
+    #    if i in sutra_changes:
+    #        n += 1
+    #    if sutra := evidences[i][0]:
+    #        #print(i, sutra)
+    #        if GL := sutra_to_GL(sutra):
+    #            if len(GL[1]) == n:
+    #                print(i, GL)
+    #                k+=1
+    #    if sutra := evidences[i][1]:
+    #        #print(i, sutra)
+    #        if GL := sutra_to_GL(sutra):
+    #            if len(GL[1]) == n:
+    #                print(i, GL)
+    #                k+=1
+    #print(k)
+
     for i in evidences:
-        if i in sutra_changes:
-            n += 1
-        if sutra := evidences[i][0]:
-            #print(i, sutra)
-            if GL := sutra_to_GL(sutra):
-                if len(GL[1]) == n:
-                    print(i, GL)
-                    k+=1
-        if sutra := evidences[i][1]:
-            #print(i, sutra)
-            if GL := sutra_to_GL(sutra):
-                if len(GL[1]) == n:
-                    print(i, GL)
-                    k+=1
-    print(k)
+        if evidences[i][2]:
+            #print(i, evidences[i][0], '\n', evidences[i][2], '\n')
+            pattern_to_GL(evidences[i][2])
+        if evidences[i][3]:
+            #print(i, evidences[i][0], '\n', evidences[i][3], '\n')
+            pattern_to_GL(evidences[i][3])
