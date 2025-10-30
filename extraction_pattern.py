@@ -50,7 +50,7 @@ def pattern_to_GL(pattern):
                 num = int(num.group()) if num else 1
                 GL += re.match(r'^\D+', pat).group() * num
     GL = ''.join(gana_to_GL[i] for i in GL)
-    print(patterns, GL)
+
     # Yati handling
     if 'यति' in pattern:
         yatis = re.findall(yati, pattern)
