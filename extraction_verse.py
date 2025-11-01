@@ -2,17 +2,20 @@ import re
 import numpy as np
 from itertools import product
 
+# Score matrix
 MATCH = 1
 MISMATCH = -1
 GAP = -5
+score = {}
 
-def score(chars):
-    """Compute alignment score for four characters."""
-    G, L = chars.count('G'), chars.count('L')
-    total_score = (G*(G-1)/2 + L*(L-1)/2) * MATCH + (G*L) * MISMATCH
+for chars in product(['G','L','-'], repeat=4):
+    a,b,c,d = chars
+    G = (a=='G') + (b=='G') + (c=='G') + (d=='G')
+    L = (a=='L') + (b=='L') + (c=='L') + (d=='L')
+    total_score = (G*(G-1)//2 + L*(L-1)//2) * MATCH + (G*L) * MISMATCH
     if '-' in chars:
         total_score += GAP
-    return total_score
+    score[chars] = total_score
 
 def multi_align_4D(s1, s2, s3, s4):
     a, b, c, d = len(s1), len(s2), len(s3), len(s4)
@@ -40,14 +43,14 @@ def multi_align_4D(s1, s2, s3, s4):
                         prev = D[ii, jj, kk, ll]
                         if prev == -np.inf:
                             continue
-                        chars = [
+                        chars = (
                             s1[ii] if use[0] else '-',
                             s2[jj] if use[1] else '-',
                             s3[kk] if use[2] else '-',
                             s4[ll] if use[3] else '-'
-                        ]
+                        )
                         gapcount = 4 - sum(use)
-                        move_score = score(chars) + GAP * gapcount
+                        move_score = score[chars] + GAP * gapcount
                         cur_score = prev + move_score
                         if cur_score > best_score:
                             best_score = cur_score
@@ -59,7 +62,7 @@ def multi_align_4D(s1, s2, s3, s4):
     aligned = ["", "", "", ""]
     i, j, k, l = a, b, c, d
     seqs = [s1, s2, s3, s4]
-    
+
     while (i, j, k, l) != (0, 0, 0, 0):
         ii, jj, kk, ll, use = back[i, j, k, l]
         prev_indices = [ii, jj, kk, ll]
@@ -70,7 +73,7 @@ def multi_align_4D(s1, s2, s3, s4):
                 aligned[idx] = seqs[idx][prev_indices[idx]] + aligned[idx]
             else:  # Gap
                 aligned[idx] = '-' + aligned[idx]
-        
+
         i, j, k, l = ii, jj, kk, ll
 
     return D[a, b, c, d], aligned
@@ -114,7 +117,7 @@ def consensus_pattern(L, n):
 
 def find_best_pattern(s, n):
     '''Finds the best split of string s such that the pieces are the most aligned to each other'''
-    best_score = float('-inf')
+    best_score = -np.inf
     best_pattern = ['', '', '', '']
     for split in splits(len(s), n, pieces=4):
         # Partition input string according to split
@@ -127,7 +130,7 @@ def find_best_pattern(s, n):
             best_score = score
             best_pattern = aligned
 
-    if best_score == float('-inf'):
+    if best_score == -np.inf:
         return 'G', 0
     return consensus_pattern(best_pattern, n), best_score / ((n*(n-1)/2) * MATCH)
 
