@@ -42,6 +42,23 @@ if __name__ == '__main__':
         if re.search(jaati, evidences[i][0]) or re.search(jaati, evidences[i][1]):
             sutra_changes.append(i)
 
+    n = 0
+    for i in evidences:
+        if i in sutra_changes:
+            n += 1
+        if evidences[i][0]:
+            print(sutra_to_GL(evidences[i][0])[1])
+        if evidences[i][1]:
+            print(sutra_to_GL(evidences[i][1])[1])
+        if evidences[i][2]:
+            print(pattern_to_GL(evidences[i][2])[0])
+        if evidences[i][3]:
+            print(pattern_to_GL(evidences[i][3])[0])
+        if evidences[i][4]:
+            print(verse_to_GL(evidences[i][4], n)[0])
+        if evidences[i][5]:
+            print(verse_to_GL(evidences[i][5], n)[0])
+
     ## Preliminary sanity check tests
     #for file in ['sq.txt', 'si.txt']:
     #    with open('ch2/' + file, 'r') as f:
@@ -113,10 +130,11 @@ if __name__ == '__main__':
     #                k+=1
     #print(k)
 
-    for i in evidences:
-        if evidences[i][2]:
-            #print(i, evidences[i][0], '\n', evidences[i][2], '\n')
-            pattern_to_GL(evidences[i][2])
-        if evidences[i][3]:
-            #print(i, evidences[i][0], '\n', evidences[i][3], '\n')
-            pattern_to_GL(evidences[i][3])
+    ## Testing pattern_to_GL()
+    #for i in evidences:
+    #    if evidences[i][2]:
+    #        #print(i, evidences[i][0], '\n', evidences[i][2], '\n')
+    #        pattern_to_GL(evidences[i][2])
+    #    if evidences[i][3]:
+    #        #print(i, evidences[i][0], '\n', evidences[i][3], '\n')
+    #        pattern_to_GL(evidences[i][3])

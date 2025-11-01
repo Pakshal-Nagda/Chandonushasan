@@ -4,17 +4,15 @@ from itertools import product
 
 MATCH = 1
 MISMATCH = -1
-GAP = -2
+GAP = -5
 
 def score(chars):
     """Compute alignment score for four characters."""
-    chars = [c for c in chars if c != '-']
-    if len(chars) <= 1:
-        return 0
-    # All equal and non-gap
-    if len(set(chars)) == 1:
-        return MATCH
-    return MISMATCH
+    G, L = chars.count('G'), chars.count('L')
+    total_score = (G*(G-1)/2 + L*(L-1)/2) * MATCH + (G*L) * MISMATCH
+    if '-' in chars:
+        total_score += GAP
+    return total_score
 
 def multi_align_4D(s1, s2, s3, s4):
     a, b, c, d = len(s1), len(s2), len(s3), len(s4)
@@ -90,11 +88,34 @@ def splits(L, n, tol=1, pieces=4):
             yield from helper(so_far + [x], left - x, depth + 1)
     return list(helper([], L, 0))
 
+def consensus_pattern(L, n):
+    '''Makes the consensus pattern of length n given a list of aligned patterns'''
+    assert len(L) == 4
+    assert len(L[0]) == len(L[1]) == len(L[2]) == len(L[3])
+    m = len(L[0])
+    to_remove = n - m
+    consensus = ''
+    for i in range(m):
+        pos = [j[i] for j in L]
+        if i == m - 1:
+            consensus += 'L' if 'G' not in pos else 'G'
+        elif pos.count('-') >= 2:
+            if not to_remove:
+                consensus += max('G', 'L', key=pos.count)
+            else:
+                to_remove -= 1
+        elif pos.count('G') > pos.count('L'):
+            consensus += 'G'
+        elif pos.count('L') > pos.count('G'):
+            consensus += 'L'
+        else:
+            consensus += '?'
+    return consensus
+
 def find_best_pattern(s, n):
     '''Finds the best split of string s such that the pieces are the most aligned to each other'''
     best_score = float('-inf')
-    best_pattern = ''
-    best_split = ()
+    best_pattern = ['', '', '', '']
     for split in splits(len(s), n, pieces=4):
         # Partition input string according to split
         indices = [0]
@@ -105,9 +126,10 @@ def find_best_pattern(s, n):
         if score > best_score:
             best_score = score
             best_pattern = aligned
-            best_split = split
 
-    return best_pattern, best_split, best_score / n
+    if best_score == float('-inf'):
+        return 'G', 0
+    return consensus_pattern(best_pattern, n), best_score / ((n*(n-1)/2) * MATCH)
 
 def verse_to_GL(verse, n):
     '''Finds the best underlying pada pattern in a verse with errors'''
@@ -128,10 +150,10 @@ def verse_to_GL(verse, n):
         pat = full_pattern[:n-1]
         if full_pattern[n:2*n-1] == full_pattern[2*n:3*n-1] == full_pattern[3*n:-1]:
             last = 'L' if full_pattern[n-1] == full_pattern[2*n-1] == full_pattern[3*n-1] == full_pattern[-1] == 'L' else 'G'
-            return pat + last, (n, n, n, n), 1
+            return pat + last, 1
     
     if len(full_pattern) > 4*n + 4:
         candidates = [find_best_pattern(full_pattern[:4*n], n),
                       find_best_pattern(full_pattern[-4*n:], n)]
-        return max(candidates, key=lambda x: x[2])
+        return max(candidates, key=lambda x: x[1])
     return find_best_pattern(full_pattern, n)
