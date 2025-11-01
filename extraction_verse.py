@@ -1,7 +1,7 @@
 import re
 import numpy as np
 from itertools import product
-from concurrent.futures import ProcessPoolExecutor, as_completed
+from concurrent.futures import ThreadPoolExecutor
 
 # Score matrix
 MATCH = 1
@@ -97,26 +97,28 @@ def consensus_pattern(L, n):
     assert len(L) == 4
     assert len(L[0]) == len(L[1]) == len(L[2]) == len(L[3])
     m = len(L[0])
-    to_remove = n - m
+    to_remove = m - n
+    assert to_remove >= 0
     consensus = ''
     for i in range(m):
         pos = [j[i] for j in L]
         if i == m - 1:
             consensus += 'L' if 'G' not in pos else 'G'
         elif pos.count('-') >= 2:
-            if not to_remove:
-                consensus += max('G', 'L', key=pos.count)
-            else:
+            if to_remove:
                 to_remove -= 1
+            else:
+                consensus += max('G', 'L', key=pos.count)
         elif pos.count('G') > pos.count('L'):
             consensus += 'G'
         elif pos.count('L') > pos.count('G'):
             consensus += 'L'
         else:
             consensus += '?'
+    assert to_remove == 0
     return consensus
 
-def do_split(split, s, n):
+def do_split(split, s):
     indices = [0]
     for l in split:
         indices.append(indices[-1]+l)
@@ -128,15 +130,14 @@ def find_best_pattern(s, n):
     best_score = -np.inf
     best_pattern = ['', '', '', '']
     all_splits = splits(len(s), n, pieces=4)
-    with ProcessPoolExecutor() as executor:
-        futures = [executor.submit(do_split, split, s, n) for split in all_splits]
-        for f in as_completed(futures):
-            score, aligned = f.result()
+    with ThreadPoolExecutor(1) as executor:
+        results = executor.map(do_split, all_splits, [s] * len(all_splits))
+        for score, aligned in results:
             if score > best_score:
                 best_score = score
                 best_pattern = aligned
     if best_score == -np.inf:
-        return 'G', 0
+        return '', 0
     return consensus_pattern(best_pattern, n), best_score / ((n*(n-1)/2) * MATCH)
 
 def verse_to_GL(verse, n):
@@ -156,7 +157,7 @@ def verse_to_GL(verse, n):
 
     if len(full_pattern) == 4*n:
         pat = full_pattern[:n-1]
-        if full_pattern[n:2*n-1] == full_pattern[2*n:3*n-1] == full_pattern[3*n:-1]:
+        if full_pattern[n:2*n-1] == full_pattern[2*n:3*n-1] == full_pattern[3*n:-1] == pat:
             last = 'L' if full_pattern[n-1] == full_pattern[2*n-1] == full_pattern[3*n-1] == full_pattern[-1] == 'L' else 'G'
             return pat + last, 1
 
