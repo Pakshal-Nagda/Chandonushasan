@@ -1,6 +1,7 @@
 import re
 import numpy as np
 from itertools import product
+from concurrent.futures import ProcessPoolExecutor, as_completed
 
 # Score matrix
 MATCH = 1
@@ -18,6 +19,7 @@ for chars in product(['G','L','-'], repeat=4):
     score[chars] = total_score
 
 def multi_align_4D(s1, s2, s3, s4):
+    '''Multiple sequence alignment algorithm to find the aligned GL pattern'''
     a, b, c, d = len(s1), len(s2), len(s3), len(s4)
     D = np.full((a+1, b+1, c+1, d+1), -np.inf)
     back = np.empty((a+1, b+1, c+1, d+1), dtype=object)
@@ -66,12 +68,11 @@ def multi_align_4D(s1, s2, s3, s4):
     while (i, j, k, l) != (0, 0, 0, 0):
         ii, jj, kk, ll, use = back[i, j, k, l]
         prev_indices = [ii, jj, kk, ll]
-        
+
         for idx in range(4):
-            if use[idx]:  # This sequence contributed a character
-                # Use the character at position prev_indices[idx]
+            if use[idx]:
                 aligned[idx] = seqs[idx][prev_indices[idx]] + aligned[idx]
-            else:  # Gap
+            else:
                 aligned[idx] = '-' + aligned[idx]
 
         i, j, k, l = ii, jj, kk, ll
@@ -115,21 +116,25 @@ def consensus_pattern(L, n):
             consensus += '?'
     return consensus
 
+def do_split(split, s, n):
+    indices = [0]
+    for l in split:
+        indices.append(indices[-1]+l)
+    parts = [s[indices[i]:indices[i+1]] for i in range(4)]
+    score, aligned = multi_align_4D(*parts)
+    return score, aligned
+
 def find_best_pattern(s, n):
-    '''Finds the best split of string s such that the pieces are the most aligned to each other'''
     best_score = -np.inf
     best_pattern = ['', '', '', '']
-    for split in splits(len(s), n, pieces=4):
-        # Partition input string according to split
-        indices = [0]
-        for l in split:
-            indices.append(indices[-1]+l)
-        parts = [s[indices[i]:indices[i+1]] for i in range(4)]
-        score, aligned = multi_align_4D(*parts)
-        if score > best_score:
-            best_score = score
-            best_pattern = aligned
-
+    all_splits = splits(len(s), n, pieces=4)
+    with ProcessPoolExecutor() as executor:
+        futures = [executor.submit(do_split, split, s, n) for split in all_splits]
+        for f in as_completed(futures):
+            score, aligned = f.result()
+            if score > best_score:
+                best_score = score
+                best_pattern = aligned
     if best_score == -np.inf:
         return 'G', 0
     return consensus_pattern(best_pattern, n), best_score / ((n*(n-1)/2) * MATCH)
@@ -154,7 +159,7 @@ def verse_to_GL(verse, n):
         if full_pattern[n:2*n-1] == full_pattern[2*n:3*n-1] == full_pattern[3*n:-1]:
             last = 'L' if full_pattern[n-1] == full_pattern[2*n-1] == full_pattern[3*n-1] == full_pattern[-1] == 'L' else 'G'
             return pat + last, 1
-    
+
     if len(full_pattern) > 4*n + 4:
         candidates = [find_best_pattern(full_pattern[:4*n], n),
                       find_best_pattern(full_pattern[-4*n:], n)]
