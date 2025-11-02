@@ -21,53 +21,64 @@ def calculate_score(a, b, c, d):
     return total_score
 
 MOVES = [use for use in product((0,1), repeat=4) if any(use)]
-moves_array = np.array(MOVES, dtype=np.int32)
+moves_array = np.array(MOVES, dtype=np.int8)
+
+from numba import njit, prange
+import numpy as np
 
 @njit(parallel=True)
 def multi_align_4D_njit(s1, s2, s3, s4):
-    """Numba-optimized multiple sequence alignment"""
     a, b, c, d = len(s1), len(s2), len(s3), len(s4)
+    D = np.full((a+1, b+1, c+1, d+1), -128, dtype=np.int8)
+    D[0, 0, 0, 0] = 0
+    # Backtrack arrays
+    back_move = np.full((a+1, b+1, c+1, d+1, 4), -1, dtype=np.int8)
+    back_prev = np.full((a+1, b+1, c+1, d+1, 4), -1, dtype=np.int8)
 
-    D = np.full((a+1, b+1, c+1, d+1), -1000, dtype=np.int32)
-    back_move = np.full((a+1, b+1, c+1, d+1, 4), -1, dtype=np.int32)
-    back_prev = np.full((a+1, b+1, c+1, d+1, 4), -1, dtype=np.int32)
-    D[0,0,0,0] = 0
-    for i in prange(a+1):
-        for j in prange(b+1):
-            for k in prange(c+1):
-                for l in prange(d+1):
-                    if i == j == k == l == 0:
-                        continue
-                    best_score = -1000
-                    best_move_idx = -1
-                    best_prev = np.array([-1, -1, -1, -1], dtype=np.int32)
+    max_diag = a + b + c + d
+    for diag_sum in range(1, max_diag + 1):
+        # Collect candidates for parallel processing
+        candidates = []
+        for i_idx in range(max(0, diag_sum - (b + c + d)), min(a, diag_sum) + 1):
+            for j_idx in range(max(0, diag_sum - i_idx - (c + d)), min(b, diag_sum - i_idx) + 1):
+                for k_idx in range(max(0, diag_sum - i_idx - j_idx - d), min(c, diag_sum - i_idx - j_idx) + 1):
+                    l_idx = diag_sum - i_idx - j_idx - k_idx
+                    if 0 <= l_idx <= d:
+                        candidates.append((i_idx, j_idx, k_idx, l_idx))
 
-                    for move_idx in range(len(moves_array)):
-                        use = moves_array[move_idx]
-                        ii = i - use[0]
-                        jj = j - use[1]
-                        kk = k - use[2]
-                        ll = l - use[3]
-                        if ii < 0 or jj < 0 or kk < 0 or ll < 0:
-                            continue
-                        if D[ii, jj, kk, ll] == -1000:
-                            continue
-                        char_a = s1[ii] if use[0] else ord('-')
-                        char_b = s2[jj] if use[1] else ord('-')
-                        char_c = s3[kk] if use[2] else ord('-')
-                        char_d = s4[ll] if use[3] else ord('-')
-                        gapcount = 4 - (use[0] + use[1] + use[2] + use[3])
-                        move_score = calculate_score(char_a, char_b, char_c, char_d) + GAP * gapcount
-                        cur_score = D[ii, jj, kk, ll] + move_score
-                        if cur_score > best_score:
-                            best_score = cur_score
-                            best_move_idx = move_idx
-                            best_prev = np.array([ii, jj, kk, ll], dtype=np.int32)
+        candidates_arr = np.array(candidates, dtype=np.int8)
 
-                    if best_move_idx != -1:
-                        D[i, j, k, l] = best_score
-                        back_move[i, j, k, l] = moves_array[best_move_idx]
-                        back_prev[i, j, k, l] = best_prev
+        # Parallel loop over candidates on this diagonal
+        for idx in prange(len(candidates_arr)):
+            i, j, k, l = candidates_arr[idx]
+            best_score = -128
+            best_move_idx = -1
+            best_prev = np.array([-1, -1, -1, -1], dtype=np.int8)
+            for move_idx in range(len(moves_array)):
+                use = moves_array[move_idx]
+                ii = i - use[0]
+                jj = j - use[1]
+                kk = k - use[2]
+                ll = l - use[3]
+                if ii < 0 or jj < 0 or kk < 0 or ll < 0:
+                    continue
+                if D[ii, jj, kk, ll] == -128:
+                    continue
+                char_a = s1[ii] if use[0] else ord('-')
+                char_b = s2[jj] if use[1] else ord('-')
+                char_c = s3[kk] if use[2] else ord('-')
+                char_d = s4[ll] if use[3] else ord('-')
+                gapcount = 4 - (use[0] + use[1] + use[2] + use[3])
+                move_score = calculate_score(char_a, char_b, char_c, char_d) + GAP * gapcount
+                cur_score = D[ii, jj, kk, ll] + move_score
+                if cur_score > best_score:
+                    best_score = cur_score
+                    best_move_idx = move_idx
+                    best_prev = np.array([ii, jj, kk, ll], dtype=np.int8)
+            if best_move_idx != -1:
+                D[i, j, k, l] = best_score
+                back_move[i, j, k, l] = moves_array[best_move_idx]
+                back_prev[i, j, k, l] = best_prev
 
     return D[a, b, c, d], back_move, back_prev, a, b, c, d
 
@@ -75,7 +86,7 @@ def multi_align_4D_njit(s1, s2, s3, s4):
 def traceback_alignment(s1, s2, s3, s4, back_move, back_prev, a, b, c, d):
     """Numba-optimized traceback"""
     max_len = a + b + c + d
-    aligned_chars = np.full((4, max_len), ord('-'), dtype=np.int32)
+    aligned_chars = np.full((4, max_len), ord('-'), dtype=np.int8)
     i, j, k, l = a, b, c, d
     pos = 0
 
@@ -101,10 +112,10 @@ def traceback_alignment(s1, s2, s3, s4, back_move, back_prev, a, b, c, d):
 
 def multi_align_4D(s1, s2, s3, s4):
     """Wrapper for numba-optimized alignment"""
-    s1_arr = np.array([ord(c) for c in s1], dtype=np.int32)
-    s2_arr = np.array([ord(c) for c in s2], dtype=np.int32)
-    s3_arr = np.array([ord(c) for c in s3], dtype=np.int32)
-    s4_arr = np.array([ord(c) for c in s4], dtype=np.int32)
+    s1_arr = np.array([ord(c) for c in s1], dtype=np.int8)
+    s2_arr = np.array([ord(c) for c in s2], dtype=np.int8)
+    s3_arr = np.array([ord(c) for c in s3], dtype=np.int8)
+    s4_arr = np.array([ord(c) for c in s4], dtype=np.int8)
 
     score, back_move, back_prev, a, b, c, d = multi_align_4D_njit(s1_arr, s2_arr, s3_arr, s4_arr)
     aligned = traceback_alignment(s1_arr, s2_arr, s3_arr, s4_arr, back_move, back_prev, a, b, c, d)
@@ -116,8 +127,8 @@ def splits_helper(L, n, tol, pieces):
     """Numba-optimized splits generation - no nested functions"""
     lo = max(1, n - tol)
     hi = n + tol
-    max_splits = 1000
-    result = np.zeros((max_splits, pieces), dtype=np.int32)
+    max_splits = 50
+    result = np.empty((max_splits, pieces), dtype=np.int8)
     count = 0
 
     # Generate all valid 4-tuples (a, b, c, d) where a+b+c+d=L
@@ -133,7 +144,7 @@ def splits_helper(L, n, tol, pieces):
                     result[count, 3] = d
                     count += 1
 
-    valid_result = np.zeros((count, pieces), dtype=np.int32)
+    valid_result = np.zeros((count, pieces), dtype=np.int8)
     for i in range(count):
         for j in range(pieces):
             valid_result[i, j] = result[i, j]
@@ -150,7 +161,7 @@ def consensus_pattern_njit(aligned_array, n):
     """Numba-optimized consensus pattern generation"""
     m = aligned_array.shape[1]
     to_remove = m - n
-    consensus = np.full(n, ord('?'), dtype=np.int32)
+    consensus = np.full(n, ord('?'), dtype=np.int8)
     consensus_pos = 0
 
     for i in range(m):
@@ -196,7 +207,7 @@ def consensus_pattern(L, n):
     assert len(L[0]) == len(L[1]) == len(L[2]) == len(L[3])
 
     m = len(L[0])
-    aligned_array = np.zeros((4, m), dtype=np.int32)
+    aligned_array = np.zeros((4, m), dtype=np.int8)
     for i in range(4):
         for j in range(m):
             aligned_array[i, j] = ord(L[i][j])
