@@ -70,7 +70,7 @@ def pattern_to_GL(pattern):
             elif re.match(r'^पञ्चदश$', yatis[i]): yatis[i] = 15
             else: raise ValueError(yatis[i])
     elif 'ैरिति वर्तते' in pattern:
-        yatis = ['^']
+        yatis = [-1]
     else:
         yatis = []
 
