@@ -2,7 +2,7 @@ import re
 import numpy as np
 from itertools import product
 from concurrent.futures import ThreadPoolExecutor
-from numba import njit
+from numba import njit, prange
 
 # Score matrix
 MATCH = 1
@@ -23,8 +23,8 @@ def calculate_score(a, b, c, d):
 MOVES = [use for use in product((0,1), repeat=4) if any(use)]
 moves_array = np.array(MOVES, dtype=np.int32)
 
-@njit
-def multi_align_4D(s1, s2, s3, s4):
+@njit(parallel=True)
+def multi_align_4D_njit(s1, s2, s3, s4):
     """Numba-optimized multiple sequence alignment"""
     a, b, c, d = len(s1), len(s2), len(s3), len(s4)
 
@@ -32,10 +32,10 @@ def multi_align_4D(s1, s2, s3, s4):
     back_move = np.full((a+1, b+1, c+1, d+1, 4), -1, dtype=np.int32)
     back_prev = np.full((a+1, b+1, c+1, d+1, 4), -1, dtype=np.int32)
     D[0,0,0,0] = 0
-    for i in range(a+1):
-        for j in range(b+1):
-            for k in range(c+1):
-                for l in range(d+1):
+    for i in prange(a+1):
+        for j in prange(b+1):
+            for k in prange(c+1):
+                for l in prange(d+1):
                     if i == j == k == l == 0:
                         continue
                     best_score = -1000
@@ -106,7 +106,7 @@ def multi_align_4D(s1, s2, s3, s4):
     s3_arr = np.array([ord(c) for c in s3], dtype=np.int32)
     s4_arr = np.array([ord(c) for c in s4], dtype=np.int32)
 
-    score, back_move, back_prev, a, b, c, d = multi_align_4D(s1_arr, s2_arr, s3_arr, s4_arr)
+    score, back_move, back_prev, a, b, c, d = multi_align_4D_njit(s1_arr, s2_arr, s3_arr, s4_arr)
     aligned = traceback_alignment(s1_arr, s2_arr, s3_arr, s4_arr, back_move, back_prev, a, b, c, d)
 
     return score, aligned
@@ -216,12 +216,14 @@ def find_best_pattern(s, n):
     best_score = -100
     best_pattern = ['', '', '', '']
     all_splits = splits(len(s), n, pieces=4)
+    
     with ThreadPoolExecutor() as executor:
         results = executor.map(do_split, all_splits, [s] * len(all_splits))
         for score, aligned in results:
             if score > best_score:
                 best_score = score
                 best_pattern = aligned
+    
     if best_score == -100:
         return '', 0
     return consensus_pattern(best_pattern, n), best_score / (15 * n * MATCH)
