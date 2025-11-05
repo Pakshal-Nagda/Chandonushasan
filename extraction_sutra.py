@@ -21,7 +21,7 @@ g1 = fr'{gana}[िीुूृॄॢॣ]?{visarga}'
 g2 = fr'({gana}[िीुूृॄॢॣ्\s]?)?{gana}{au}'
 gn = fr'({gana}[िीुूृॄॢॣ्\s]?){{,6}}{gana}ा{visarga}'
 gm = fr'{gana}[िीुूृॄॢॣ]\s*'
-y = r'([ग-म]+ैः)'
+y = r'([ग-ह]+ैः)'
 
 def sutra_to_pattern(sutra):
     match = re.match(fr'^{jaati}?\s*(?P<pattern>({g1}|{g2}|{gn}|{gm})*({g1}|{g2}|{gn}))(?P<name>.+)$', sutra)
@@ -61,16 +61,22 @@ def sutra_to_pattern(sutra):
             if not extracted[i]:
                 continue
             element = re.sub(r'\s', '', extracted[i])
-            element = re.sub(r'(ं|ैः|[मशषस]्)$', '', element)
+            element = re.sub(r'(ं|ै?ः|[मशषस]्)$', '', element)
             extracted[i] = element
 
         return extracted
+
+    elif (match := re.search(fr'(?P<name>\S+)(\s+{y})?$', sutra)):
+        name = match.group('name')
+        name = re.sub(r'\s', '', name)
+        name = re.sub(r'(ं|ै?ः|[मशषस]्)$', '', name)
+        return ['', name, None]
 
     else:
         return ['', '', None]
 
 def decode_yati(yati):
-    key = '_कखगघङचछजझञटठडढणतथदधनपफबभम'
+    key = '_कखगघङचछजझञटठडढणतथदधनपफबभमयरलवशषसह'
     decoded = []
     cumulative = 0
     for i in yati:
