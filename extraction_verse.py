@@ -241,9 +241,14 @@ def verse_to_GL(verse, n):
     non_dev_re = re.compile(r"[^अ-औक-हा-्ॠॡॢॣंः]")
     syllable_re = re.compile(r"((([क-ह]्)*[क-ह][ा-ॄॢॣेैोौ]?|[अ-ऌॠॡएऐओऔ])[ंः]?([क-ह]्)?)")
     is_G_re = re.compile(r"[ाीूॄॣेैोौ्]$|[ंः]$|[आईऊॠॡएऐओऔ]")
+    subs = ['अ', 'आ', 'इ', 'ई', 'उ', 'ऊ', 'ऋ', 'ॠ', 'ऌ', 'ॡ', 'ए', 'ऐ', 'ओ', 'औ']
+    reps = ['', 'ा', 'ि', 'ी', 'ु', 'ू', 'ृ', 'ॄ', 'ॢ', 'ॣ', 'े', 'ै', 'ो', 'ौ']
 
     full_pattern = ''
     verse = non_dev_re.sub('', verse)
+    for sub, rep in zip(subs, reps):
+        verse = re.sub('्' + sub, rep, verse)
+
     syllables = [m.group(1) for m in syllable_re.finditer(verse)]
     for syll in syllables:
         if is_G_re.search(syll):
