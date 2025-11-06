@@ -23,18 +23,22 @@ gn = fr'({gana}[िीुूृॄॢॣ्\s]?){{,6}}{gana}ा{visarga}'
 gm = fr'{gana}[िीुूृॄॢॣ]\s*'
 y = r'([ग-ह]+ैः)'
 
+def extract_name(sutra):
+    if (match := re.search(fr'(?P<name>\S+)(\s+{y})?$', sutra)):
+        name = match.group('name')
+        name = re.sub(r'\s', '', name)
+        name = re.sub(r'(ं|ै?ः|[मशषस]्)$', '', name)
+        name = name.rstrip('अआइईउऊऋॠऌॡएऐओऔेैोौंः')
+        name = re.sub(r'^.्.ो(?=.[^्])', '', name)
+        return name
+
 def sutra_to_pattern(sutra):
     match = re.match(fr'^{jaati}?\s*(?P<pattern>({g1}|{g2}|{gn}|{gm})*({g1}|{g2}|{gn}))(?P<name>.+)$', sutra)
     if match:
         pattern, name = match.group('pattern'), match.group('name')
 
-        # Gana symbol after L/G not allowed
-        if mistake := re.search(r'.*[लग].*?([यमतरजभनस][^्].*)', pattern):
-            name = pattern[-len(mistake.group(1)):] + name
-            pattern = pattern[:-len(mistake.group(1))]
-
         # Handling vriddhi sandhi of au
-        elif pattern.endswith('ाव'):
+        if pattern.endswith('ाव'):
             if re.match(r'^[क-ह]', name): name = 'अ' + name
             elif re.match(r'^ा', name): name = 'आ' + name[1:]
             elif re.match(r'^ि', name): name = 'इ' + name[1:]
@@ -64,19 +68,17 @@ def sutra_to_pattern(sutra):
             element = re.sub(r'(ं|ै?ः|[मशषस]्)$', '', element)
             if i == 1:
                 element = element.rstrip('अआइईउऊऋॠऌॡएऐओऔेैोौंः')
+                element = re.sub(r'^.्.ो(?=.[^्])', '', element)
             extracted[i] = element
+        
+        # Fallback for name extraction
+        if extracted[1] == '':
+            extracted[1] = extract_name(sutra)
 
         return extracted
 
-    elif (match := re.search(fr'(?P<name>\S+)(\s+{y})?$', sutra)):
-        name = match.group('name')
-        name = re.sub(r'\s', '', name)
-        name = re.sub(r'(ं|ै?ः|[मशषस]्)$', '', name)
-        name = name.rstrip('अआइईउऊऋॠऌॡएऐओऔेैोौंः')
-        return ['', name, None]
-
     else:
-        return ['', '', None]
+        return ['', extract_name(sutra), None]
 
 def decode_yati(yati):
     key = '_कखगघङचछजझञटठडढणतथदधनपफबभमयरलवशषसह'

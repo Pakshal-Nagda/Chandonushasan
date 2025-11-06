@@ -602,12 +602,12 @@
     "30": {
         "len": 5,
         "name": [
-            "सावित्री",
-            "सावित्री"
+            "इत्री",
+            "इत्री"
         ],
         "pattern": [
-            "GGGLG",
-            "GGGLG",
+            "GGGLGLLGLLG",
+            "GGGLGLLGLLG",
             "GGGLG",
             "GGGLG",
             "GGGLG",
@@ -1856,7 +1856,7 @@
     "80": {
         "len": 8,
         "name": [
-            "ल्गोललितगति",
+            "ललितगति",
             "ललितगति"
         ],
         "pattern": [
@@ -2539,8 +2539,8 @@
             "मत्ता"
         ],
         "pattern": [
-            "GGGGLLLLGG",
-            "GGGGLLLLGG",
+            "GGGGLLLLGGGGGGGLGGL",
+            "GGGGLLLLGGGGGGGLGGL",
             "GGGGLLLLGG",
             "GGGGLLLLGG",
             "GGGGLLLLGG",
@@ -2818,8 +2818,8 @@
     "118": {
         "len": 10,
         "name": [
-            "म्गोबन्धूक",
-            "म्गोबन्धूक"
+            "बन्धूक",
+            "बन्धूक"
         ],
         "pattern": [
             "LLLLLL",
@@ -4588,12 +4588,12 @@
     "186": {
         "len": 12,
         "name": [
-            "ना",
-            "ना"
+            "ललना",
+            "ललना"
         ],
         "pattern": [
-            "GLLGGLLLGLLGLL",
-            "GLLGGLLLGLLGLL",
+            "GLLGGLLLGLLGLLLLL",
+            "GLLGGLLLGLLGLLLLL",
             "GLLGGLLLLLLG",
             "GLLGGLLLLLLG",
             "GLLGGLLLLLLG",
@@ -4667,8 +4667,8 @@
     "189": {
         "len": 12,
         "name": [
-            "त्योपुष्पविचित्रा",
-            "त्योपुष्पविचित्रा"
+            "पुष्पविचित्रा",
+            "पुष्पविचित्रा"
         ],
         "pattern": [
             "GGLLGG",
@@ -5145,7 +5145,7 @@
         "len": 13,
         "name": [
             "मजुभाषिणी",
-            "स्जोगोमजुभाषिणी"
+            "गोमजुभाषिणी"
         ],
         "pattern": [
             "LGLGGLGLGLGLG",
@@ -6698,8 +6698,8 @@
     "264": {
         "len": 16,
         "name": [
-            "स्गोशरमाला",
-            "स्गोशरमाला"
+            "शरमाला",
+            "शरमाला"
         ],
         "pattern": [
             "GLLGLLGLLGLL",
@@ -7522,7 +7522,7 @@
         "len": 17,
         "name": [
             "हरिणी",
-            "स्लोगोहरिणी"
+            "गोहरिणी"
         ],
         "pattern": [
             "LLLLLGLLLLLLLLGLG",
@@ -8220,8 +8220,8 @@
     "315": {
         "len": 18,
         "name": [
-            "त्योपङ्कजवक्त्रा",
-            "त्योपङ्कजवक्त्रा"
+            "पङ्कजवक्त्रा",
+            "पङ्कजवक्त्रा"
         ],
         "pattern": [
             "LLLLLLLLGLLG",
@@ -8257,12 +8257,12 @@
     "316": {
         "len": 18,
         "name": [
-            "नभ्साःसुरभित्रि",
-            "नभ्साःसुरभिस्त्रि"
+            "सुरभित्रि",
+            "सुरभिस्त्रि"
         ],
         "pattern": [
-            "L",
-            "LLGL",
+            "LLLLGLLLLG",
+            "LLGLLLLGLLLLG",
             "LLGLLLLGLLLLGLLLLG",
             "LLGLLLLGLLLLGLLLLG",
             "LLGLLLLGLLLLGLLLLG",
@@ -9009,12 +9009,12 @@
     "340": {
         "len": 20,
         "name": [
-            "यौल्गौसद्रत्नमाला",
-            "यौल्गौसद्रनमाला"
+            "सद्रत्नमाला",
+            "सद्रनमाला"
         ],
         "pattern": [
-            "LLLLLLLLGL",
-            "LLLLLLLL",
+            "LLLLLLLLGLGGGLGGLG",
+            "LLLLLLLLGGGLGGLG",
             "GGGLLLLLGLLLGGGLGGLG",
             "GLGLGGLG",
             "GGGLLLLLGLLLGGGLGGLG",

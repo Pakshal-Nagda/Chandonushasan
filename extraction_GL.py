@@ -19,6 +19,7 @@ for i in chandas:
 extracted = {i:{'len': 0, 'name': [None]*2, 'pattern': [None]*6, 'score': [None]*2, 'yati': [None]*4} for i in chandas}
 n = 0
 for i in chandas:
+    print(i)
     if i in sutra_changes:
         n += 1
 
