@@ -62,6 +62,8 @@ def sutra_to_pattern(sutra):
                 continue
             element = re.sub(r'\s', '', extracted[i])
             element = re.sub(r'(ं|ै?ः|[मशषस]्)$', '', element)
+            if i == 1:
+                element = element.rstrip('अआइईउऊऋॠऌॡएऐओऔेैोौंः')
             extracted[i] = element
 
         return extracted
@@ -70,6 +72,7 @@ def sutra_to_pattern(sutra):
         name = match.group('name')
         name = re.sub(r'\s', '', name)
         name = re.sub(r'(ं|ै?ः|[मशषस]्)$', '', name)
+        name = name.rstrip('अआइईउऊऋॠऌॡएऐओऔेैोौंः')
         return ['', name, None]
 
     else:

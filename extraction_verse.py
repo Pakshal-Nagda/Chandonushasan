@@ -23,9 +23,6 @@ def calculate_score(a, b, c, d):
 MOVES = [use for use in product((0,1), repeat=4) if any(use)]
 moves_array = np.array(MOVES, dtype=np.int8)
 
-from numba import njit, prange
-import numpy as np
-
 @njit(parallel=True)
 def multi_align_4D_njit(s1, s2, s3, s4):
     a, b, c, d = len(s1), len(s2), len(s3), len(s4)
