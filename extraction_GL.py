@@ -55,6 +55,12 @@ for i in extracted:
             extracted[i]['name'][j] = extracted[str(int(i)-1)]['name'][j]
         if extracted[i]['yati'][2+j] == [-1]:
             extracted[i]['yati'][2+j] = extracted[str(int(i)-1)]['yati'][2+j]
+        if extracted[i]['yati'][j] and any(error := [k for k in extracted[i]['yati'][j] if k >= extracted[i]['len']]):
+            for k in error:
+                extracted[i]['yati'][j].remove(k)
+        if extracted[i]['yati'][2+j] and any(error := [k for k in extracted[i]['yati'][2+j] if k >= extracted[i]['len']]):
+            for k in error:
+                extracted[i]['yati'][2+j].remove(k)
 
 # Saving data
 with open('GL.json', 'w') as f:
