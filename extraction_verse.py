@@ -125,7 +125,7 @@ def splits_helper(L, n, tol, pieces):
     lo = max(1, n - tol)
     hi = n + tol
     max_splits = 50
-    result = np.empty((max_splits, pieces), dtype=np.int8)
+    result = np.empty((max_splits, pieces), dtype=np.uint8)
     count = 0
 
     # Generate all valid 4-tuples (a, b, c, d) where a+b+c+d=L
@@ -141,7 +141,7 @@ def splits_helper(L, n, tol, pieces):
                     result[count, 3] = d
                     count += 1
 
-    valid_result = np.zeros((count, pieces), dtype=np.int8)
+    valid_result = np.zeros((count, pieces), dtype=np.uint8)
     for i in range(count):
         for j in range(pieces):
             valid_result[i, j] = result[i, j]
@@ -256,6 +256,9 @@ def verse_to_GL(verse, n):
         else:
             full_pattern += 'L'
 
+    if n == 0:
+        n = len(full_pattern) // 4
+
     if len(full_pattern) == 4*n:
         pat = full_pattern[:n-1]
         if full_pattern[n:2*n-1] == full_pattern[2*n:3*n-1] == full_pattern[3*n:-1] == pat:
@@ -266,4 +269,5 @@ def verse_to_GL(verse, n):
         candidates = [find_best_pattern(full_pattern[:4*n], n),
                       find_best_pattern(full_pattern[-4*n:], n)]
         return max(candidates, key=lambda x: x[1])
+
     return find_best_pattern(full_pattern, n)
