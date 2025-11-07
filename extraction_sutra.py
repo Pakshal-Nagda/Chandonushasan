@@ -29,7 +29,7 @@ def extract_name(sutra):
         name = re.sub(r'\s', '', name)
         name = re.sub(r'(ं|ै?ः|[मशषस]्)$', '', name)
         name = name.rstrip('अआइईउऊऋॠऌॡएऐओऔेैोौंः')
-        name = re.sub(r'^.्.ो(?=.[^्])', '', name)
+        name = re.sub(r'^(.्.ो(?=.[^्])|[यग]ो)', '', name)
         return name
 
 def sutra_to_pattern(sutra):
@@ -68,7 +68,7 @@ def sutra_to_pattern(sutra):
             element = re.sub(r'(ं|ै?ः|[मशषस]्)$', '', element)
             if i == 1:
                 element = element.rstrip('अआइईउऊऋॠऌॡएऐओऔेैोौंः')
-                element = re.sub(r'^.्.ो(?=.[^्])', '', element)
+                element = re.sub(r'^(.्.ो(?=.[^्])|[यग]ो)', '', element)
             extracted[i] = element
         
         # Fallback for name extraction
