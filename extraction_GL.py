@@ -55,14 +55,20 @@ for i in extracted:
     for j in range(2):
         if extracted[i]['name'][j] == 'वा':
             extracted[i]['name'][j] = extracted[str(int(i)-1)]['name'][j]
+
         if extracted[i]['yati'][2+j] == [-1]:
             extracted[i]['yati'][2+j] = extracted[str(int(i)-1)]['yati'][2+j]
-        if extracted[i]['yati'][j] and any(error := [k for k in extracted[i]['yati'][j] if k >= extracted[i]['len']]):
-            for k in error:
-                extracted[i]['yati'][j].remove(k)
-        if extracted[i]['yati'][2+j] and any(error := [k for k in extracted[i]['yati'][2+j] if k >= extracted[i]['len']]):
-            for k in error:
-                extracted[i]['yati'][2+j].remove(k)
+
+        if yati := extracted[i]['yati'][j]:
+            for k in range(len(yati)):
+                if sum(yati[:k+1]) >= extracted[i]['len']:
+                    extracted[i]['yati'][j] = yati[:k]
+                    break
+        if yati := extracted[i]['yati'][2+j]:
+            for k in range(len(yati)):
+                if sum(yati[:k+1]) >= extracted[i]['len']:
+                    extracted[i]['yati'][2+j] = yati[:k]
+                    break
 
 # Saving data
 with open('GL.json', 'w') as f:

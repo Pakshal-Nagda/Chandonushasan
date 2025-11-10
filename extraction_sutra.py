@@ -82,12 +82,7 @@ def sutra_to_pattern(sutra):
 
 def decode_yati(yati):
     key = '_कखगघङचछजझञटठडढणतथदधनपफबभमयरलवशषसह'
-    decoded = []
-    cumulative = 0
-    for i in yati:
-        cumulative += key.index(i)
-        decoded.append(cumulative)
-    return decoded
+    return [key.index(i) for i in yati]
 
 def pattern_to_GL(pattern):
     pattern = re.sub('([यमतरजभनसलग])्?([यमतरजभनसलग])ौ', lambda x: x.group(1) + x.group(2), pattern)

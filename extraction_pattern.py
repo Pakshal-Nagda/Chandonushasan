@@ -70,11 +70,6 @@ def pattern_to_GL(pattern):
             elif re.match(r'^प.्चदश$', yatis[i]): yatis[i] = 15
             else: raise ValueError('Yati not found')
 
-        cumulative = 0
-        for i in range(len(yatis)):
-            cumulative += yatis[i]
-            yatis[i] = cumulative
-
     elif 'ैरिति वर्तते' in pattern:
         yatis = [-1]
     else:
