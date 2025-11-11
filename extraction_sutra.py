@@ -85,7 +85,7 @@ def decode_yati(yati):
     return [key.index(i) for i in yati]
 
 def pattern_to_GL(pattern):
-    pattern = re.sub('([यमतरजभनसलग])्?([यमतरजभनसलग])ौ', lambda x: x.group(1) + x.group(2), pattern)
+    pattern = re.sub('([यमतरजभनसलग][िीुूृॄॢॣ]?)्?([यमतरजभनसलग])ौ', lambda x: x.group(1) + x.group(2), pattern)
     pattern = re.sub('([यमतरजभनसलग])ौ', lambda x: x.group(1) * 2, pattern)
     pattern = re.sub('[ाो्ंः ]', '', pattern)
     GL = ''

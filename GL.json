@@ -857,7 +857,7 @@
         ],
         "pattern": [
             "GGGGGG",
-            "GLGGLGGLGGLGGLGGLGGGGGGG",
+            "GLGGLGGLGGLGGLGGLGGGG",
             "GLGGGG",
             "GLGGGG",
             "GLGGGG",
@@ -2722,7 +2722,7 @@
             "चित्रगति"
         ],
         "pattern": [
-            "GLLGLLGLLGG",
+            "GLLGLLGLLG",
             "",
             "GLLGLLGLLG",
             "GLLGLLGLLG",
@@ -2747,7 +2747,7 @@
             "निलया"
         ],
         "pattern": [
-            "LLLLLLLLLGG",
+            "LLLLLLLLLG",
             "LLLLLLLLLG",
             "LLLLLLLLLG",
             "LLLLLLLLLG",
@@ -2772,8 +2772,8 @@
             "उषिता"
         ],
         "pattern": [
-            "LGLLGLLGLGG",
-            "LGLLGLLGLGG",
+            "LGLLGLLGLG",
+            "LGLLGLLGLG",
             "LGLLGLLGLG",
             "LGLLGLLGLG",
             "LGLLGLLGLG",
@@ -4754,8 +4754,8 @@
             "ही"
         ],
         "pattern": [
-            "LLLLLLLLLLLGLLG",
-            "LLLLLLLLLLLGLLG",
+            "LLLLLLLLLLLG",
+            "LLLLLLLLLLLG",
             "LLLLLLLLL",
             "LLLLLLLLLLLG",
             "LLLLLLLLLLLG",
@@ -4854,8 +4854,8 @@
             "अङ्गरुचि"
         ],
         "pattern": [
-            "GLLGLLGLLGLLGG",
-            "GLLGLLGLLGLLGG",
+            "GLLGLLGLLGLLG",
+            "GLLGLLGLLGLLG",
             "GLLGLLGLLGLLG",
             "GLLGLLGLLGLLG",
             "GLLGLLGLLGLLG",
@@ -5477,8 +5477,8 @@
             "त्वरितगति"
         ],
         "pattern": [
-            "LLLLLLLLLLLLGG",
-            "LLLLLLLLLLLLGG",
+            "LLLLLLLLLLLLG",
+            "LLLLLLLLLLLLG",
             "LLLLLLLLLLLLG",
             "LLLLLLLLLLLLG",
             "LLLLLLLLLLLLG",
@@ -6137,8 +6137,8 @@
             "शशिकला"
         ],
         "pattern": [
-            "LLLLLLLLLLLLLLGLLG",
-            "LLLLLLLLLLLLLLGLLG",
+            "LLLLLLLLLLLLLLG",
+            "LLLLLLLLLLLLLLG",
             "LLLLLLLLLLLLLLG",
             "LLLLLLLLLLLLLLG",
             "LLLLLLLLLLLLLLG",
@@ -6727,8 +6727,8 @@
             "संगत"
         ],
         "pattern": [
-            "GLLGLLGLLGLLGLLGG",
-            "GLLGLLGLLGLLGLLGG",
+            "GLLGLLGLLGLLGLLG",
+            "GLLGLLGLLGLLGLLG",
             "GLLGLLGLLGLLGLLG",
             "GLLGLLGLLGLLGLLG",
             "GLLGLLGLLGLLGLLG",
@@ -6752,8 +6752,8 @@
             "कामुकी"
         ],
         "pattern": [
-            "GGGGGGGGGGGGGGGGG",
-            "GGGGGGGGGGGGGGGGG",
+            "GGGGGGGGGGGGGGGG",
+            "GGGGGGGGGGGGGGGG",
             "GGGGGGGGGGGGGGGG",
             "GGGGGGGGGGGGGGGG",
             "GGGGGGGGGGGGGGGG",
@@ -6777,8 +6777,8 @@
             "कामुकी"
         ],
         "pattern": [
-            "LLGLLGLLGLLGLLGGG",
-            "LLGLLGLLGLLGLLGGG",
+            "LLGLLGLLGLLGLLGG",
+            "LLGLLGLLGLLGLLGG",
             "LLGLLGLLGLLGLLGG",
             "LLGLLGLLGLLGLLGG",
             "LLGLLGLLGLLGLLGG",
@@ -6802,8 +6802,8 @@
             "चलधृति"
         ],
         "pattern": [
-            "LLLLLLLLLLLLLLLGG",
-            "LLLLLLLLLLLLLLLGG",
+            "LLLLLLLLLLLLLLLG",
+            "LLLLLLLLLLLLLLLG",
             "LLLLLLLLLLLLLLLG",
             "LLLLLLLLLLLLLLLG",
             "LLLLLLLLLLLLLLLG",
@@ -6827,8 +6827,8 @@
             "अचलधृति"
         ],
         "pattern": [
-            "LLLLLLLLLLLLLLLLL",
-            "LLLLLLLLLLLLLLLLL",
+            "LLLLLLLLLLLLLLLL",
+            "LLLLLLLLLLLLLLLL",
             "LLLLLLLLLLLLLLLL",
             "LLLLLLLLLLLLLLLL",
             "LLLLLLLLLLLLLLLG",
@@ -6852,8 +6852,8 @@
             "मङ्गलमङ्गना"
         ],
         "pattern": [
-            "LLLGLLLGLLGLLGLGG",
-            "LLLGLLLGLLGLLGLGG",
+            "LLLGLLLGLLGLLGLG",
+            "LLLGLLLGLLGLLGLG",
             "LLLGLLLGLLGLLGLG",
             "LLLGLLLGLLGLLGLG",
             "LLLGLLLGLLGLLGLG",
@@ -8123,7 +8123,7 @@
             "अनङ्गलेखा"
         ],
         "pattern": [
-            "LLLLLGGGGGGGGGGGGGLGGLGG",
+            "LLLLLGGGGGGGGGGGGGLGG",
             "LLLLLGGGGGGGLGGLGG",
             "LLLLLGGGGGGGLGGLGG",
             "LLLLLGGGGGGGLGGLGG",
@@ -8789,8 +8789,8 @@
             "तरुणीवदनेन्दु"
         ],
         "pattern": [
-            "LLGLLGLLGLLGLLGGG",
-            "LLGLLGLLGLLGLLGGG",
+            "LLGLLGLLGLLGLLGG",
+            "LLGLLGLLGLLGLLGG",
             "LLGLLGLLGLLGLLGLLGG",
             "LLGLLGLLGLLGLLGLLGG",
             "LLGLLGLLGLLGLLGLLGG",
@@ -9462,8 +9462,8 @@
             "मदिरा"
         ],
         "pattern": [
-            "GLLGLLGLLGLLGLLGLLGLLGG",
-            "GLLGLLGLLGLLGLLGLLGLLGG",
+            "GLLGLLGLLGLLGLLGLLGLLG",
+            "GLLGLLGLLGLLGLLGLLGLLG",
             "GLLGLLGLLGLLGLLGLLGLLG",
             "GLLGLLGLLGLLGLLGLLGLLG",
             "GLLGLLGLLGLLGLLGLLGLLG",
@@ -9869,8 +9869,8 @@
             "संभ्रान्ता"
         ],
         "pattern": [
-            "LLLLGGGGLGGLLLLLLLLLLLLGLLG",
-            "LLLLGGGLLGGLLLLLLLLLLLLGLLG",
+            "LLLLGGGGLGGLLLLLLLLLLLLG",
+            "LLLLGGGLLGGLLLLLLLLLLLLG",
             "LLLLGGGGGGGLLLLLLLLLLLLG",
             "LLLLGGGLLGGLLLLLLLLLLLLG",
             "LLLLGGGLLGGLLLLLLLLLLLLG",
@@ -9996,8 +9996,8 @@
             "हंसपदा"
         ],
         "pattern": [
-            "GGLLGGGLLGLLLLLLLLLLLLLLGG",
-            "GGLLGGGLLGLLLLLLLLLLLLLLGG",
+            "GGLLGGGLLGLLLLLLLLLLLLLLG",
+            "GGLLGGGLLGLLLLLLLLLLLLLLG",
             "GGLLGGGLLGLLLLLLLLLLLLLLG",
             "GGLLGGGLLGGGLLLLLLLLLLLLG",
             "GGLLGGGLLGLLLLLLLLLLLLLLG",
@@ -10027,8 +10027,8 @@
             "चपल"
         ],
         "pattern": [
-            "LLLLGLLGLLGGLLLLLLLLLLLLGG",
-            "LLLLGLLGLLGGLLLLLLLLLLLLGG",
+            "LLLLGLLGLLGGLLLLLLLLLLLLG",
+            "LLLLGLLGLLGGLLLLLLLLLLLLG",
             "LLLLGLLGLLGGLLLLLLLLLLLLG",
             "LLLLGLLGLLGGLLLLLLLLLLLLG",
             "LLLLGLLGLLGGLLLLLLLLLLLLG",
