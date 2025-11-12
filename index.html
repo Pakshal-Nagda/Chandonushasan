@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="sa">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chandodivākara</title>
+    <link rel="stylesheet" href="styles.css">
+    <script src="https://d3js.org/d3.v7.min.js"></script>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <div class="symbol">॥अर्हम्॥</div>
+            <h1 class="title">छन्दोदिवाकरः</h1>
+        </div>
+
+        <div id="sunburst"></div>
+
+        <div class="input-container">
+            <div class="input-group">
+                <textarea id="textInput" placeholder="Type here..."></textarea>
+            </div>
+
+            <div class="control-group">
+                <div class="top">
+                    <label for="scriptDropdown">Script</label>
+                    <select id="scriptDropdown">
+                        <option value="GL">GL</option>
+                        <option value="Devanagari">Devanagari</option>
+                    </select>
+
+                    <label for="inputTypeDropdown">Input Type</label>
+                    <select id="inputTypeDropdown">
+                        <option value="pada">Quarter</option>
+                        <option value="line">Line</option>
+                        <option value="verse">Verse</option>
+                    </select>
+                </div>
+
+                <div class="bottom">
+                    <label for="maxLength">Maximum length</label>
+                    <input type="range" id="maxLength" min="1" max="50" value="26">
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>

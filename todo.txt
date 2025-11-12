@@ -1,0 +1,18 @@
+Visualization:
+- Handle root labeling. It is showing sheshajati now that is incorrect.
+- Console <path> error resolution (does not affect visualization, but some unknown silent error)
+- Handle radius overflow while changing maxLength
+- Transition when clicking on a node
+- Explore other coloring schemes like quadratic with ratio, exponential etc. Change how ratio is defined maybe.
+- Add different scripts handling like IAST, HK, SLP etc.
+- Responsive design
+
+Chandas:
+- Confirm if vidyunmala has yati at 4
+- Confirm if vitan definition interpreted correctly
+- Confirm if 2nd yati shifts in variants of piplika (karabha etc.) as new letters are added
+- Confirm if utkalika is non-sama meter
+- Extract non-sama meters
+
+Misc:
+- Make readme
