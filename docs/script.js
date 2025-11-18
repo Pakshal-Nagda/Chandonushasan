@@ -97,6 +97,11 @@ function computeFill(d, targetPattern, inputText) {
 
 // ---------- Script Conversion ----------
 function text2GL(text, type, script) {
+    if (type !== 'pada') {
+        alert('Sorry, this input type is not supported currently.');
+        document.getElementById('inputTypeDropdown').value = 'pada'
+    }
+
     if (script === 'GL') return text.replace(/[^GL]/g, '');
 
     if (script === 'Devanagari') {
@@ -114,6 +119,40 @@ function text2GL(text, type, script) {
             GL += isGRe.test(m[1]) ? 'G' : 'L';
         return GL;
     }
+
+    if (script === 'IAST') {
+        text = text.replace(/[^aāiīuūṛṝḷḹeokgṅcjñṭḍṇtdnpbmyrlvśṣshṁḥ\s]/g, '')
+
+        const S = '(a[iu]?|[āiīuūṛṝḷḹeo])';
+        const V = '([kgcjṭḍtdpb]h|[kgṅcjñṭḍṇtdnpbmyrlvśṣshṁḥ])';
+
+        const G = new RegExp('^' + V + '*(a[iu]|[āīūṝḹeo]|' + S + '(?=\\s*' + V + '(?!' + S + ')))');
+        const L = new RegExp('^' + V + '*[aiuṛḷ](?=' + V + S + '|\\s|$)');
+
+        let GL = '';
+        let pos = 0;
+        let gMatch, lMatch;
+
+        while (pos < text.length) {
+
+            gMatch = G.exec(text.slice(pos));
+            lMatch = L.exec(text.slice(pos));
+
+            if (lMatch) {
+                GL += 'L';
+                pos += lMatch[0].length;
+            } else if (gMatch) {
+                GL += 'G';
+                pos += gMatch[0].length;
+            } else {
+                pos += 1;
+            }
+        }
+        console.log(GL)
+
+        return GL;
+    }
+
     return text;
 }
 

@@ -4,8 +4,9 @@ Visualization:
 - Handle radius overflow while changing maxLength
 - Transition when clicking on a node
 - Explore other coloring schemes like quadratic with ratio, exponential etc. Change how ratio is defined maybe.
-- Add different scripts handling like IAST, HK, SLP etc.
+- Add different scripts handling like HK, SLP etc.
 - Responsive design
+- Show the exact GL pattern that a user enters
 
 Chandas:
 - Confirm if vidyunmala has yati at 4
@@ -16,3 +17,4 @@ Chandas:
 
 Misc:
 - Make readme
+- Cite sources in readme
