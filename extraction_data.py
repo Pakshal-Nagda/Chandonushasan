@@ -102,7 +102,7 @@ for i in range(len(names)):
 # Prachit etc (389)
 names = ['प्रचित', 'अर्ण', 'अर्णव', 'व्याल', 'जीमूत', 'लीलाकर', 'उद्दाम', 'शङ्ख', 'समुद्र', 'भुजंग']
 for i in range(len(names)):
-    for j in ['LGG', 'GGG', 'GGL', 'LGG', 'GLL', 'LLL']:
+    for j in ['LGG', 'GGG', 'GGL', 'LGG', 'GLL']:
         D[f'389_{i}_{j}'] = ['LLLLLL' + j * (i+7), names[i], []]
 
 # Pannag etc (390)
@@ -158,5 +158,5 @@ for pat, name, yati in D.values():
     if yati:
         current['yati'] = yati
 
-with open('data.json', 'w') as f:
+with open('docs/data.json', 'w') as f:
     json.dump(data, f, ensure_ascii=False)
