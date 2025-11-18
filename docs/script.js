@@ -121,7 +121,7 @@ function text2GL(text, type, script) {
     }
 
     if (script === 'IAST') {
-        text = text.replace(/[^aāiīuūṛṝḷḹeokgṅcjñṭḍṇtdnpbmyrlvśṣshṁḥ\s]/g, '')
+        text = text.toLowerCase().replace(/[^aāiīuūṛṝḷḹeokgṅcjñṭḍṇtdnpbmyrlvśṣshṁḥ\s]/g, '')
 
         const S = '(a[iu]?|[āiīuūṛṝḷḹeo])';
         const V = '([kgcjṭḍtdpb]h|[kgṅcjñṭḍṇtdnpbmyrlvśṣshṁḥ])';
@@ -148,7 +148,6 @@ function text2GL(text, type, script) {
                 pos += 1;
             }
         }
-        console.log(GL)
 
         return GL;
     }
